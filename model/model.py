@@ -129,7 +129,6 @@ def dizionario_item(item):
 
 
 
-
 # creiamo il dizionario degli utenti
 def dizionario_user(ui_interactions):
     user_id = list(ui_interactions.index)
@@ -139,3 +138,26 @@ def dizionario_user(ui_interactions):
         user_dict[i] = counter
         counter += 1
     return user_id, user_dict
+
+
+def recommend_unknown_user(model, interactions, item_dict, user_features, item_features, nrec_items=5):
+    # otteniamo numero di utenti e numero di libri delle interazioni
+    n_users, n_items = interactions.shape
+    # otteniamo i punteggi relativi a un utente sconosciuto per ogni libro,
+    # utilizzando le feature dei libri e dell'utente stesso
+    scores = pd.Series(model.predict(0, np.arange(n_items), item_features=item_features, user_features=user_features))
+    # impostiamo come index dei punteggi le colonne delle interazioni, che sono gli isbn dei libri
+    scores.index = interactions.columns
+    # ordiniamo i punteggi in ordine decrescente
+    scores = list(pd.Series(scores.sort_values(ascending=False).index))
+    # selezioniamo i primi 5 libri
+    return_score_list = scores[0:nrec_items]
+    # otteniamo la lista dei titoli relativi ai libri selezionati
+    scores = list(pd.Series(return_score_list).apply(lambda x: item_dict[x]))
+    print("\n Recommended Items:")
+    counter = 1
+    # stampiamo i titoli dei libri ottenuti
+    for i in scores:
+        print(str(counter) + '- ' + i)
+        counter += 1
+    return scores
