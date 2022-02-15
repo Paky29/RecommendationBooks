@@ -11,7 +11,6 @@ def feature_colon_value_user(my_list):
         result.append(res)
     return result
 
-
 def feature_colon_value_item(my_list):
     result = []
     ll = ['author', 'pub', 'average_rating', 'category']
