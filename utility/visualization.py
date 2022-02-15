@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from matplotlib.pyplot import xticks, yticks
+from matplotlib.pyplot import xticks
 
 
 def create_rating_hist(ratings_selected):
