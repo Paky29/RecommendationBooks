@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from lightfm.data import Dataset
 from lightfm import LightFM
+from lightfm.evaluation import precision_at_k, auc_score
 
 
 def feature_colon_value_user(my_list):
