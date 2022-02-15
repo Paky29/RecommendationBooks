@@ -1,16 +1,21 @@
-# This is a sample Python script.
-
-# Press Maiusc+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import numpy as np
+from matplotlib import pyplot as plt
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def create_rating_hist(ratings_selected):
+    data = ratings_selected['rating']
+    data = np.array(data)
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    d = np.diff(np.unique(data)).min()
+    left_of_first_bin = data.min() - float(d) / 2
+    right_of_last_bin = data.max() + float(d) / 2
+    n, bins, patches = plt.hist(data, np.arange(left_of_first_bin, right_of_last_bin + d, d), edgecolor='white')
+    patches[0].set_facecolor('#3ad1f6')
+    patches[1].set_facecolor('#3aa2f6')
+    patches[2].set_facecolor('#3a6af6')
+    patches[3].set_facecolor('#3a3df6')
+    patches[4].set_facecolor('#090a89')
+    plt.title("Distribuzione valutazioni")
+    plt.xlabel("Rating")
+    plt.ylabel("Numero valutazioni")
+    plt.show()
