@@ -104,6 +104,19 @@ def define_interaction_table(ratings):
     user_book_interaction = user_book_interaction.fillna(0)  # da valutare
     return user_book_interaction
 
+#valuta il modello in base alle metriche di precisione e AUC
+def evaluate_model(model, train, test, user_features, item_features):
+    train_precision = precision_at_k(model, train, k=5, item_features=item_features, user_features=user_features).mean()
+    test_precision = precision_at_k(model, test, k=5, item_features=item_features, user_features=user_features,
+                                    train_interactions=train).mean()
+
+    train_auc = auc_score(model, train, item_features=item_features, user_features=user_features).mean()
+    test_auc = auc_score(model, test, item_features=item_features, user_features=user_features,
+                         train_interactions=train).mean()
+
+    return 'Precision: train %.2f, test %.2f.' % (train_precision, test_precision), 'AUC: train %.2f, test %.2f.' % (
+    train_auc, test_auc)
+
 
 # creiamo il dizionario dei libri
 def dizionario_item(item):
@@ -112,3 +125,16 @@ def dizionario_item(item):
     for i in range(df.shape[0]):
         item_dict[(df.loc[i, 'isbn'])] = df.loc[i, 'title']
     return item_dict
+
+
+
+
+# creiamo il dizionario degli utenti
+def dizionario_user(ui_interactions):
+    user_id = list(ui_interactions.index)
+    user_dict = {}
+    counter = 0
+    for i in user_id:
+        user_dict[i] = counter
+        counter += 1
+    return user_id, user_dict
