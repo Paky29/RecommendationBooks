@@ -49,12 +49,13 @@ def create_age_pie_chart(utenti):
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle."""
     plt.show()
 
-    def create_gender_pie_chart(utenti):
-        sizes = (utenti['gender']).value_counts().tolist()
+def create_gender_pie_chart(utenti):
+    sizes = (utenti['gender']).value_counts().tolist()
 
-        fig1, ax1 = plt.subplots()
-        colors = ['#007FFF', '#FF54A7']
-        ax1.pie(sizes, labels=["M", "F"],
-                shadow=True, startangle=90, colors=colors, autopct='%0.01f%%')
-        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle."""
-        plt.show()
+    fig1, ax1 = plt.subplots()
+    colors = ['#007FFF', '#FF54A7']
+    ax1.pie(sizes, labels=["M", "F"],
+            shadow=True, startangle=90, colors=colors, autopct='%0.01f%%')
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle."""
+    plt.show()
+

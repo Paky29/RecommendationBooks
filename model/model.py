@@ -97,3 +97,18 @@ def create_model(interactions, weights, user_features, item_features):
               num_threads=16,
               epochs=35)
     return model
+
+# creiamo una pivot table delle interazioni utile per mostrare le raccomandazioni
+def define_interaction_table(ratings):
+    user_book_interaction = pd.pivot_table(ratings, index='user_id', columns='isbn', values='rating')
+    user_book_interaction = user_book_interaction.fillna(0)  # da valutare
+    return user_book_interaction
+
+
+# creiamo il dizionario dei libri
+def dizionario_item(item):
+    item_dict = {}
+    df = item[['isbn', 'title']].sort_values('isbn').reset_index()
+    for i in range(df.shape[0]):
+        item_dict[(df.loc[i, 'isbn'])] = df.loc[i, 'title']
+    return item_dict
