@@ -1,5 +1,3 @@
-from turtle import pd
-
 import numpy as np
 from lightfm.data import Dataset
 from lightfm import LightFM

@@ -3,6 +3,23 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
+def books_with_ratings(books, ratings):
+    books_selected = books.merge(ratings, on="isbn")
+    books_selected = books_selected[['isbn', 'author', 'pub', 'average_rating', 'category']]
+    books_selected = books_selected.drop_duplicates('isbn')
+    return books_selected
+
+def create_gender():
+    users = pd.read_csv(
+        os.path.join('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetOriginali\\Users.csv'),
+        usecols=['User-ID', 'Age'],
+        dtype={'User-ID': 'str', 'Age': 'float64'})
+
+    # Creazione casuale genere degli utenti
+    p = (0.50, 0.50)
+    gender = ("M", "F")
+    users['gender'] = np.random.choice(gender, size=len(users.index), p=p)
+    write_csv(users, "UsersWithGender.csv")
 
 def pre_process(book_threshold, rating_threshold):
     # Lettura del dataset di libri
