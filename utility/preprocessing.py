@@ -3,6 +3,9 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
+def write_csv(df, filename):
+    df.to_csv('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetProcessati\\' + filename, index=False)
+
 def books_with_ratings(books, ratings):
     books_selected = books.merge(ratings, on="isbn")
     books_selected = books_selected[['isbn', 'author', 'pub', 'average_rating', 'category']]
