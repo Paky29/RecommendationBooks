@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from lightfm.data import Dataset
 from lightfm import LightFM
 
