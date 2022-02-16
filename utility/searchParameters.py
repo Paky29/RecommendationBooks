@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from lightfm import LightFM, cross_validation
 from lightfm.evaluation import auc_score, precision_at_k
-from model.model import define_features, define_interaction_table,  evaluate_model
+from model.model import define_features, define_interaction_table, evaluate_model
 
 
 def sample_hyperparameters():
@@ -38,14 +38,11 @@ def random_search(train, test, train_weight, item_f, user_f, num_samples=20, num
 
 
 if __name__ == "__main__":
-    # users, books, ratings = pre_process(40, 200)
-    users = pd.read_csv(
-        os.path.join('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetProcessati\\UsersProcessati.csv'))
-    books = pd.read_csv(
-        os.path.join('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetProcessati\\BooksProcessati.csv'))
-    ratings = pd.read_csv(os.path.join(
-        'C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetProcessati\\RatingsProcessati.csv'))
-
+    # users, books, ratings = pre_process(30, 300)
+    datapath = os.path.join("dataset\\dataset_processati", "")
+    users = pd.read_csv(datapath + "UsersProcessati.csv")
+    books = pd.read_csv(datapath + "BooksProcessati.csv")
+    ratings = pd.read_csv(datapath + "RatingsProcessati.csv")
 
     books_selected = books.merge(ratings, on="isbn")
     books_selected = books_selected[['isbn', 'author', 'pub', 'average_rating', 'category']]
@@ -60,7 +57,7 @@ if __name__ == "__main__":
                                                                            random_state=np.random.RandomState(seed=1))
 
     (score, hyperparams, model) = max(random_search(train, test, train_weights, item_f, user_f, num_threads=16),
-                                          key=lambda x: x[0])
+                                      key=lambda x: x[0])
 
     prec, auc = evaluate_model(model, train, test, item_f, user_f)
     print(prec)

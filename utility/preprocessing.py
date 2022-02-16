@@ -3,8 +3,13 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
-def write_csv(df, filename):
-    df.to_csv('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetProcessati\\' + filename, index=False)
+datapath_proc = os.path.join("dataset\\dataset_processati", "")
+datapath_orig = os.path.join("dataset\\dataset_originali", "")
+
+
+def write_csv(df, percorso):
+    df.to_csv(percorso, index=False)
+
 
 def books_with_ratings(books, ratings):
     books_selected = books.merge(ratings, on="isbn")
@@ -12,9 +17,10 @@ def books_with_ratings(books, ratings):
     books_selected = books_selected.drop_duplicates('isbn')
     return books_selected
 
+
 def create_gender():
     users = pd.read_csv(
-        os.path.join('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetOriginali\\Users.csv'),
+        datapath_orig + "Users.csv",
         usecols=['User-ID', 'Age'],
         dtype={'User-ID': 'str', 'Age': 'float64'})
 
@@ -22,33 +28,33 @@ def create_gender():
     p = (0.50, 0.50)
     gender = ("M", "F")
     users['gender'] = np.random.choice(gender, size=len(users.index), p=p)
-    write_csv(users, "UsersWithGender.csv")
+    write_csv(users, datapath_proc + "UsersWithGender.csv")
+
 
 def pre_process(book_threshold, rating_threshold):
     # Lettura del dataset di libri
     books = pd.read_csv(
-        os.path.join('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetOriginali\\Books.csv'),
+        datapath_orig + "Books.csv",
         usecols=['ISBN', 'Book-Title', 'Book-Author', 'Publisher'],
         dtype={'ISBN': 'str', 'Book-Title': 'str', 'Book-Author': 'str', 'Publisher': 'str'})
 
     # Lettura del dataset categorie
     categories = pd.read_csv(
-        os.path.join('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetOriginali\\Preprocessed_data.csv'),
+        datapath_orig + "Preprocessed_data.csv",
         usecols=['isbn', 'Category'],
         dtype={'isbn': 'str', 'Category': 'str'})
 
     # Lettura del dataset di valutazioni
     ratings = pd.read_csv(
-        os.path.join('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetOriginali\\Ratings.csv'),
+        datapath_orig + "Ratings.csv",
         usecols=['User-ID', 'ISBN', 'Book-Rating'],
         dtype={'User-ID': 'str', 'ISBN': 'str', 'Book-Rating': 'int32'})
 
     # Lettura del dataset di utenti
     users = pd.read_csv(
-        os.path.join('C:\\Users\\MATED14-I5\\Documents\\UNISA\\FIA\\Progetto\\DatasetProcessati\\UsersWithGender.csv'),
+        datapath_proc + 'UsersWithGender.csv',
         usecols=['User-ID', 'Age', 'gender'],
-        dtype={'User-ID': 'str', 'Age': 'float64', 'gender':'str'})
-
+        dtype={'User-ID': 'str', 'Age': 'float64', 'gender': 'str'})
 
     # Modifica nome colonne per facilitarne l'utilizzo
     users.rename(columns={'User-ID': 'user_id', 'Age': 'age'}, inplace=True)
@@ -82,7 +88,8 @@ def pre_process(book_threshold, rating_threshold):
     ratings_selected = ratings.loc[ratings['rating'] >= 1, ['user_id', 'isbn', 'rating']]
 
     # Selezione utenti con età compresa tra 17 e 50 anni
-    users = users.loc[((users['age'] >= 17) & (users['age'] <= 50)) | (np.isnan(users['age'])), ['user_id', 'age', 'gender']]
+    users = users.loc[
+        ((users['age'] >= 17) & (users['age'] <= 50)) | (np.isnan(users['age'])), ['user_id', 'age', 'gender']]
 
     # Sostituisco le età con valore NaN con l'età media del dataset
     eta_media = round(users['age'].mean(), 0)
@@ -116,6 +123,11 @@ def pre_process(book_threshold, rating_threshold):
     users = users_ratings[['user_id', 'age', 'gender']]
     users = users.drop_duplicates("user_id")
     ratings_selected = users_ratings[['user_id', 'isbn', 'rating']]
+
+    # salvo i dataframe ottenuti in un file csv
+    #write_csv(users, datapath_proc + "UsersProcessati1.csv")
+    #write_csv(book_with_categories, datapath_proc + "BooksProcessati1.csv")
+    #write_csv(ratings_selected, datapath_proc + "RatingsProcessati1.csv")
 
     # book_with_categories conterrà anche i libri non coinvolti in nessuna interazione
     return users, book_with_categories, ratings_selected
