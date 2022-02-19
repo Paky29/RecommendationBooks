@@ -38,7 +38,7 @@ def random_search(train, test, train_weight, item_f, user_f, num_samples=20, num
 
 
 if __name__ == "__main__":
-    # users, books, ratings = pre_process(30, 300)
+    # users, books, ratings = pre_process(25, 300)
     datapath = os.path.join("dataset\\dataset_processati", "")
     users = pd.read_csv(datapath + "UsersProcessati.csv")
     books = pd.read_csv(datapath + "BooksProcessati.csv")

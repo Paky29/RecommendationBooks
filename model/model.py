@@ -105,7 +105,7 @@ def create_model(interactions, weights, user_features, item_features):
 # creiamo una pivot table delle interazioni utile per mostrare le raccomandazioni
 def define_interaction_table(ratings):
     user_book_interaction = pd.pivot_table(ratings, index='user_id', columns='isbn', values='rating')
-    user_book_interaction = user_book_interaction.fillna(0)  # da valutare
+    user_book_interaction = user_book_interaction.fillna(0)
     return user_book_interaction
 
 
@@ -188,6 +188,7 @@ def recommend_user(model, interactions, user_id, user_map, item_dict, user_featu
     return_score_list = scores[0:nrec_items]
     # otteniamo la lista dei titoli relativi ai libri selezionati
     scores = list(pd.Series(return_score_list).apply(lambda x: item_dict[x]))
+    print_known_item(known_items, user_id, item_dict)
     print("\n Recommended Items:")
     counter = 1
     # stampiamo i titoli dei libri ottenuti
@@ -195,3 +196,13 @@ def recommend_user(model, interactions, user_id, user_map, item_dict, user_featu
         print(str(counter) + '- ' + i)
         counter += 1
     return scores
+
+
+def print_known_item(known_items, user_id, item_dict):
+    known_items = list(pd.Series(known_items).apply(lambda x: item_dict[x]))
+    print("User: " + str(user_id))
+    print("Known Likes:")
+    counter = 1
+    for i in known_items:
+        print(str(counter) + '- ' + i)
+        counter += 1
