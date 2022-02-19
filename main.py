@@ -8,7 +8,7 @@ from model.model import define_features, create_model, evaluate_model, recommend
     dizionario_item, define_interaction_table, recommend_unknown_user
 from utility.manageModel import store_model
 from utility.preprocessing import books_with_ratings
-from utility.visualization import create_rating_hist
+from utility.visualization import create_rating_hist, variation_epochs
 
 if __name__ == '__main__':
     # create_gender()
@@ -29,6 +29,7 @@ if __name__ == '__main__':
 
     model = create_model(train, train_weights, user_f, item_f)
     store_model(model, "modello.sav")
+    variation_epochs(train, train_weights, test, item_f, user_f)
     prec, auc = evaluate_model(model, train, test, user_f, item_f)
     print(prec)
     print(auc)
