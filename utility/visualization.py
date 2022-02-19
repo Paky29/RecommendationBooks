@@ -72,14 +72,14 @@ def variation_epochs(train, train_weights, test, item_f, user_f):
                     user_alpha=2.6928223797133117e-09,
                     item_alpha=7.58080022366649e-09,
                     max_sampled=7)
-
     warp_auc = []
     warp_prec = []
     warp_auc1 = []
     warp_prec1 = []
     warp_duration = []
-
-    for epoch in range(epochs+1):
+    x = []
+    for epoch in range(1,epochs+1):
+        x.append(epoch)
         start = time.time()
         model.fit_partial(train,
               sample_weight=train_weights,
@@ -87,7 +87,6 @@ def variation_epochs(train, train_weights, test, item_f, user_f):
               item_features=item_f,
               num_threads=16,
               epochs=1)
-
         warp_duration.append(time.time() - start)
         warp_auc.append(
             auc_score(model, test, train_interactions=train, item_features=item_f, user_features=user_f).mean())
@@ -96,8 +95,6 @@ def variation_epochs(train, train_weights, test, item_f, user_f):
         warp_prec.append(precision_at_k(model, test, k=5, item_features=item_f, user_features=user_f,
                                         train_interactions=train).mean())
         warp_prec1.append(precision_at_k(model, train, k=5, item_features=item_f, user_features=user_f).mean())
-
-    x = np.arange(epochs+1)
     plt.plot(x, np.array(warp_auc))
     plt.plot(x, np.array(warp_auc1))
     plt.plot(x, np.array(warp_prec))
