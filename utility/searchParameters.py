@@ -7,7 +7,7 @@ from lightfm.evaluation import auc_score, precision_at_k
 from model.model import define_features, define_interaction_table, evaluate_model
 
 
-def sample_hyperparameters():
+def hyperparameters():
     while True:
         yield {
             "no_components": np.random.randint(16, 64),
@@ -22,7 +22,7 @@ def sample_hyperparameters():
 
 
 def random_search(train, test, train_weight, item_f, user_f, num_samples=20, num_threads=1):
-    for hyperparams in itertools.islice(sample_hyperparameters(), num_samples):
+    for hyperparams in itertools.islice(hyperparameters(), num_samples):
         num_epochs = hyperparams.pop("num_epochs")
 
         model = LightFM(**hyperparams)
