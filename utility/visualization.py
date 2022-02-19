@@ -80,7 +80,6 @@ def variation_epochs(train, train_weights, test, item_f, user_f):
     warp_duration = []
 
     for epoch in range(epochs+1):
-        print(epoch)
         start = time.time()
         model.fit_partial(train,
               sample_weight=train_weights,

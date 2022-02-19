@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     model = create_model(train, train_weights, user_f, item_f)
     store_model(model, "modello.sav")
-    variation_epochs(train, train_weights, test, item_f, user_f)
+    #variation_epochs(train, train_weights, test, item_f, user_f)
     prec, auc = evaluate_model(model, train, test, user_f, item_f)
     print(prec)
     print(auc)
